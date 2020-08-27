@@ -9,6 +9,9 @@ from mutagen.mp3 import MP3
 musics=[]
 i = 0
 c = 0
+
+listbox = gtk.ListBox()
+
 pg.mixer.init()
 
 win = gtk.Window()
@@ -17,12 +20,17 @@ scrolledwin = gtk.ScrolledWindow()
 
 
 playbutton = gtk.Button(label="PLay")
+nextbutton = gtk.Button(label=">>")
+pervbutton = gtk.Button(label="<<")
 
-
-
+a=''
+g = 0
 def play():
-    global musics, i, c, playbutton
-
+    global musics, i, c, playbutton, listbox, g, a
+    if g != 0:
+        print(type(a),a)
+       # listbox.select_row()
+    g += 1
     if c == 0:
         pg.mixer.quit()
         samplerate = MP3(musics[i]).info.sample_rate
@@ -43,14 +51,25 @@ def play():
 
 
 
+def nex(button):
+    global i, c
+    i += 1
+    c = 0
+    play()
+nextbutton.connect("clicked", nex)
 
-listbox = gtk.ListBox()
+def perv(button):
+    global i, c
+    i -= 1
+    c = 0
+    play()
+pervbutton.connect("clicked", perv)
 
 def b1(button):
     global c
     play()
-
 playbutton.connect("clicked", b1)
+
 
 for file in os.walk("/home/parsa/Music"):
     for f in file:
@@ -68,15 +87,20 @@ win.add(grid)
 grid.attach(scrolledwin,0,0,100,100)
 scrolledwin.add(listbox)
 grid.attach(playbutton,50,101,1,1)
+grid.attach(nextbutton,51,101,1,1)
+grid.attach(pervbutton,49,101,1,1)
 
 
 def li(listbox, listboxrow):
-    global musics, i, c
+    global musics, i, c, a
     c = 0
     i = listboxrow.get_index()
+    a = listboxrow
     play()
 
 listbox.connect("row-activated", li)
+
+
 
 win.connect("destroy", gtk.main_quit)
 win.show_all()
