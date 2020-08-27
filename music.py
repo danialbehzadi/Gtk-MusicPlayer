@@ -29,16 +29,16 @@ def play():
         pg.mixer.init(samplerate)
         pg.mixer_music.load(musics[i])
         pg.mixer_music.play()
+        playbutton.set_label("Pause")
         c += 1
     elif c%2 == 1:
         print("pause")
         pg.mixer_music.pause()
-        playbutton.set_label("pause")
+        playbutton.set_label("Play")
         c += 1
     elif c%2 == 0:
-        print("play")
         pg.mixer_music.unpause()
-        playbutton.set_label("Play")
+        playbutton.set_label("Pause")
         c += 1
 
 
