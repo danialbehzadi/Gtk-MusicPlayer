@@ -4,7 +4,7 @@
 
 import gi
 gi.require_version('Gtk', '3.0')
-from gi.repository import Gtk, GLib
+from gi.repository import Gtk, GLib, GdkPixbuf
 import os
 import pygame as pg
 from mutagen.id3 import ID3
@@ -22,10 +22,21 @@ win = Gtk.Window()
 win.set_title("Music")
 scrolledwin = Gtk.ScrolledWindow()
 
+def image_define(filename,w,h):
+    return Gtk.Image.new_from_pixbuf(GdkPixbuf.Pixbuf.new_from_file_at_scale(filename=filename,width=w,height=h,preserve_aspect_ratio=True))
 
-playbutton = Gtk.Button(label="PLay")
-nextbutton = Gtk.Button(label=">>")
-pervbutton = Gtk.Button(label="<<")
+#imgplay = Gtk.Image.new_from_pixbuf(GdkPixbuf.Pixbuf.new_from_file_at_scale(filename='/home/parsa/icons/play.png',width=32,height=32,preserve_aspect_ratio=True))
+#imgstop = Gtk.Image.new_from_pixbuf(GdkPixbuf.Pixbuf.new_from_file_at_scale(filename='/home/parsa/icons/stop.png',width=32,height=32,preserve_aspect_ratio=True))
+
+
+imgplay = image_define('./icons/play.png',28,28)
+imgstop = image_define('./icons/stop.png',28,28)
+imgback = image_define('./icons/back.png',28,28)
+imgnext = image_define('./icons/next.png',28,28)
+
+playbutton = Gtk.Button(image = imgplay)
+nextbutton = Gtk.Button(image = imgnext)
+pervbutton = Gtk.Button(image = imgback)
 
 a=''
 g = 0
@@ -37,16 +48,16 @@ def play():
         pg.mixer.init(samplerate)
         pg.mixer_music.load(musics[i])
         pg.mixer_music.play()
-        playbutton.set_label("Pause")
+        playbutton.set_image(imgstop)
         c += 1
     elif c%2 == 1:
         print("pause")
         pg.mixer_music.pause()
-        playbutton.set_label("Play")
+        playbutton.set_image(imgplay)
         c += 1
     elif c%2 == 0:
         pg.mixer_music.unpause()
-        playbutton.set_label("Pause")
+        playbutton.set_image(imgstop)
         c += 1
 
 
