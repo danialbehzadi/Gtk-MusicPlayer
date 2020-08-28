@@ -31,9 +31,9 @@ a=''
 g = 0
 def play():
     global musics, i, c, playbutton, listbox, g, a
-    if g != 0:
-        print(type(a),a)
-       # listbox.select_row()
+    b = gtk.ListBoxRow()
+    listbox.select_row(b)
+    print(a.get_index(),"\n",b.get_index(),"\n\n")
     g += 1
     if c == 0:
         pg.mixer.quit()
@@ -96,10 +96,12 @@ grid.attach(pervbutton,49,101,1,1)
 
 
 def li(listbox, listboxrow):
-    global musics, i, c, a
+    global musics, i, c, a, g
     c = 0
     i = listboxrow.get_index()
-    a = listboxrow
+    if g==0:
+        a = listboxrow
+    g += 1
     play()
 
 listbox.connect("row-activated", li)
