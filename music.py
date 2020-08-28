@@ -1,6 +1,10 @@
+#! /usr/bin/python3
+# Parsa Amini, 2020
+# Released by GPL3+
+
 import gi
 gi.require_version('Gtk', '3.0')
-from gi.repository import Gtk as gtk
+from gi.repository import Gtk, GLib
 import os
 import pygame as pg
 from mutagen.id3 import ID3
@@ -10,18 +14,18 @@ musics=[]
 i = 0
 c = 0
 
-listbox = gtk.ListBox()
+listbox = Gtk.ListBox()
 
 pg.mixer.init()
 
-win = gtk.Window()
+win = Gtk.Window()
 win.set_title("Music")
-scrolledwin = gtk.ScrolledWindow()
+scrolledwin = Gtk.ScrolledWindow()
 
 
-playbutton = gtk.Button(label="PLay")
-nextbutton = gtk.Button(label=">>")
-pervbutton = gtk.Button(label="<<")
+playbutton = Gtk.Button(label="PLay")
+nextbutton = Gtk.Button(label=">>")
+pervbutton = Gtk.Button(label="<<")
 
 a=''
 g = 0
@@ -70,17 +74,17 @@ def b1(button):
     play()
 playbutton.connect("clicked", b1)
 
-
-for file in os.walk("/home/parsa/Music"):
+music_dir = GLib.get_user_special_dir(GLib.UserDirectory.DIRECTORY_MUSIC)
+for file in os.walk(music_dir):
     for f in file:
         for f2 in f:
             if f2.endswith(".mp3"):
-                l1 = gtk.Label(f2)
-                musics.append("/home/parsa/Music/"+f2)
+                l1 = Gtk.Label(label=f2)
+                musics.append('{}/{}'.format(music_dir,f2))
                 listbox.add(l1)
 
 
-grid = gtk.Grid()
+grid = Gtk.Grid()
 grid.set_row_spacing(5)
 grid.set_column_spacing(5)
 win.add(grid)
@@ -102,6 +106,6 @@ listbox.connect("row-activated", li)
 
 
 
-win.connect("destroy", gtk.main_quit)
+win.connect("destroy", Gtk.main_quit)
 win.show_all()
-gtk.main()
+Gtk.main()
