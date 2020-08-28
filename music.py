@@ -31,10 +31,6 @@ a=''
 g = 0
 def play():
     global musics, i, c, playbutton, listbox, g, a
-    b = gtk.ListBoxRow()
-    listbox.select_row(b)
-    print(a.get_index(),"\n",b.get_index(),"\n\n")
-    g += 1
     if c == 0:
         pg.mixer.quit()
         samplerate = MP3(musics[i]).info.sample_rate
@@ -59,6 +55,9 @@ def nex(button):
     global i, c
     i += 1
     c = 0
+    listbox.unselect_all()
+    row = listbox.get_row_at_index(i)
+    listbox.select_row(row)
     play()
 nextbutton.connect("clicked", nex)
 
@@ -66,6 +65,9 @@ def perv(button):
     global i, c
     i -= 1
     c = 0
+    listbox.unselect_all()
+    row = listbox.get_row_at_index(i)
+    listbox.select_row(row)
     play()
 pervbutton.connect("clicked", perv)
 
